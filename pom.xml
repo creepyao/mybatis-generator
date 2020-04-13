@@ -9,8 +9,8 @@
         <version>1.3.5</version>
     </parent>
 
-    <groupId>com.yao</groupId>
-    <artifactId>com.yao</artifactId>
+    <groupId>com.github.creepyao</groupId>
+    <artifactId>com.github.creepyao</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>MyBatis Generator Plugins</name>

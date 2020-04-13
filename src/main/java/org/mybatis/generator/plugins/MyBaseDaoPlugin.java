@@ -186,7 +186,7 @@ public class MyBaseDaoPlugin extends PluginAdapter {
         method=new Method();
         method.setName("updateByPrimaryKey");
         method.setReturnType(new FullyQualifiedJavaType("int"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("@Param(\"record\") T"),"record"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("T"),"record"));
         service.addMethod(method);
 
         //int updateByExampleSelective(T record, E example);
