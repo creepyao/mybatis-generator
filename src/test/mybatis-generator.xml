@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="testTables" targetRuntime="MyBatis3">
+        <!-- 自动为entity生成swagger2文档-->
+        <plugin type="mybatis.generator.plugins.GeneratorSwagger2Doc">
+            <property name="apiModelAnnotationPackage" value="io.swagger.annotations.ApiModel" />
+            <property name="apiModelPropertyAnnotationPackage" value="io.swagger.annotations.ApiModelProperty" />
+        </plugin>
+        <!-- Example 目标包修改插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.ExampleTargetPlugin">
+            <property name="targetPackage" value="com.yao.dataforsea_bg.db.dao.example"/>
+        </plugin>
+        <!-- Lombok插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.LombokPlugin">
+            <!-- @Data 默认开启,同时插件会对子类自动附加@EqualsAndHashCode(callSuper = true)，@ToString(callSuper = true) -->
+            <property name="@Data" value="true"/>
+            <!-- @Builder 必须在 Lombok 版本 >= 1.18.2 的情况下开启，对存在继承关系的类自动替换成@SuperBuilder -->
+            <property name="@Builder" value="false"/>
+            <!-- @NoArgsConstructor 和 @AllArgsConstructor 使用规则和Lombok一致 -->
+            <property name="@AllArgsConstructor" value="false"/>
+            <property name="@NoArgsConstructor" value="false"/>
+            <!-- @Getter、@Setter、@Accessors 等使用规则参见官方文档 -->
+            <property name="@Accessors(chain = true)" value="false"/>
+            <!-- 临时解决IDEA工具对@SuperBuilder的不支持问题，开启后(默认未开启)插件在遇到@SuperBuilder注解时会调用ModelBuilderPlugin来生成相应的builder代码 -->
+            <property name="supportSuperBuilderForIdea" value="false"/>
+        </plugin>
+        <!-- Mapper注入插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.MapperAnnotationPlugin">
+            <!-- @Mapper 默认开启 -->
+            <property name="@Mapper" value="true"/>
+            <!-- @Repository 默认关闭，开启后解决IDEA工具@Autowired报错 -->
+            <property name="@Repository" value="true"/>
+        </plugin>
+
+        <!-- 生成equals 和hashcode方法-->
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+        <!-- 实现序列化-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!-- 生成toString 方法-->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!-- 重命名Example相关的类名-->
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+            <property name="searchString" value="Example"></property>
+            <property name="replaceString" value="Example"></property>
+        </plugin>
+        <!-- 增加BaseDao插件，名称可以自定义-->
+        <plugin type="org.mybatis.generator.plugins.MyBaseDaoPlugin" >
+            <!--baseDao在你应用中的完全限定名 name:任意定义，表示BaseDao的名称；targetPackage、targetProject和下面的配置同理-->
+            <property name="name" value="BaseMapper"></property>
+            <property name="targetPackage" value="com.yao.dataforsea_bg.db.dao"></property>
+            <property name="targetProject" value="src/main/java"></property>
+        </plugin>
+
+        <!--单个对象查询插件，可根据不同字段进行查询-->
+        <plugin type="org.mybatis.generator.plugins.MySelectSingleByExamplePlugin"/>
+        <!--添加生成批量新增接口插件-->
+        <plugin type="org.mybatis.generator.plugins.MyInsertBatchPlugin"/>
+        <!-- 将Mapper.java和mapper.xml文件中的Example的方法重命名为自己定义的-->
+        <plugin type="org.mybatis.generator.plugins.MyRenameExampleMethodPlugin">
+            <property name="searchString" value="Example"></property>
+        </plugin>
+        <commentGenerator type="org.mybatis.generator.plugins.MyCommentGenerator">
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="false" />
+            <property name="suppressDate" value="false" />
+            <property name="addRemarkComments" value="true" />
+        </commentGenerator>
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://132.232.7.146:3306/infocrawler" userId="root"
+                        password="wangpengyao11">
+        </jdbcConnection>
+        <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
+           NUMERIC 类型解析为java.math.BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true"/>
+        </javaTypeResolver>
+        <!-- 指定javaBean生成的位置
+            targetPackage：生成的类要放的包，真实的包受enableSubPackages属性控制；
+            targetProject：目标项目，指定一个存在的目录下，生成的内容会放到指定目录中，如果目录不存在，MBG不会自动建目录
+         -->
+        <javaModelGenerator targetPackage="com.yao.dataforsea_bg.db.model" targetProject="src/main/java">
+            <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false；如果多个数据库改为true分目录 -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--  指定mapper映射文件生成的位置
+           targetPackage、targetProject同javaModelGenerator中作用一样-->
+        <sqlMapGenerator targetPackage="mapping" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 指定mapper接口生成的位置
+         targetPackage、targetProject同javaModelGenerator中作用一样
+         -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.yao.dataforsea_bg.db.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <!-- 指定数据库表
+        domainObjectName：生成的domain类的名字,当表名和domain类的名字有差异时一定要设置，如果不设置，直接使用表名作为domain类的名字；
+        可以设置为somepck.domainName，那么会自动把domainName类再放到somepck包里面；
+        -->
+        <!--
+        <table tableName="monitor_task" domainObjectName="MonitorTask">
+            <generatedKey column="id" sqlStatement="select replace(uuid(), '-', '')"></generatedKey>
+        </table>
+        -->
+        <!--
+        <table tableName="notifyfile" domainObjectName="NotifyFile">
+            <generatedKey column="id" sqlStatement="select replace(uuid(), '-', '')"></generatedKey>
+        </table>
+        -->
+        <!--
+        <table tableName="TC_Test" domainObjectName="MyTest" mapperName="MyTestMapper">
+            <generatedKey column="id" sqlStatement="select replace(uuid(), '-', '')"></generatedKey>
+        </table>
+        -->
+        <table tableName="unit" domainObjectName="Unit" mapperName="UnitMapper">
+            <generatedKey column="id" sqlStatement="select replace(uuid(), '-', '')"></generatedKey>
+        </table>
+    </context>
+</generatorConfiguration>
